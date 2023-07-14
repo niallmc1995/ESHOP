@@ -1,0 +1,21 @@
+.login-register{
+  background-image: linear-gradient(235deg, #565B67, #191a25);
+  height: 100vh;
+  &-panel{
+    width: 650px;
+    height: 525px;
+    background-color: var(--surface-a);
+    position: absolute;
+    left: calc(50% - 325px);
+    top:calc(50% - 268px);
+
+    .full-btn{
+      width: 100%;
+    }
+
+  }
+}
+
+.p-tag.p-element.ng-star-inserted span.p-tag-icon {
+  margin: 0;
+}

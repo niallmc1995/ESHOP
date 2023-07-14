@@ -1,0 +1,13 @@
+<div class="featured-products">
+    <h3>Featured Products</h3>
+    <div class="grid">
+      <p-carousel [value]="featuredProducts" styleClass="custom-carousel"  [numScroll]="1" [circular]="true" [autoplayInterval]="5000">
+        <ng-template let-car pTemplate="item">
+          <div class="col-3 carousel-featured" *ngFor="let product of featuredProducts">
+            <products-product-item [product]="product"></products-product-item>
+        </div>
+      </ng-template>
+      </p-carousel>
+
+    </div>
+</div>

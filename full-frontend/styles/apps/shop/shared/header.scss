@@ -1,0 +1,29 @@
+header {
+    margin-bottom: 25px;
+
+    .logo {
+        img {
+            width: 160px;
+            cursor: pointer;
+        }
+    }
+
+    // .grid-container {
+    //     padding-top: 22px;
+    // }
+
+    .search {
+        padding-top: 25px;
+    }
+    .navigation {
+        padding-top: 25px;
+    }
+
+    .tools {
+        padding-top: 25px;
+        .pi {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    }
+}
