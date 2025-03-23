@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto');
+
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -8,6 +10,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
     },
     passwordHash: {
         type: String,
@@ -29,7 +32,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    zip :{
+    zip: {
         type: String,
         default: ''
     },
@@ -40,11 +43,25 @@ const userSchema = new mongoose.Schema({
     country: {
         type: String,
         default: ''
+    },
+    resetPasswordToken: {
+        type: String,
+        default: null,
+    },
+    resetPasswordExpires: {
+        type: Date,
+        default: null,
     }
-
 });
 
-userSchema.virtual('id').get(function () {
+userSchema.methods.generateResetToken = function() {
+    const token = crypto.randomBytes(20).toString('hex'); // Generate a random token
+    this.resetPasswordToken = token; // Save the token to the user document
+    this.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+    return token;
+};
+
+userSchema.virtual('id').get(function() {
     return this._id.toHexString();
 });
 

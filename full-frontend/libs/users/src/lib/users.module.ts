@@ -15,6 +15,7 @@ import { UsersEffects } from './state/users.effects';
 import { UsersFacade } from './state/users.facade';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AuthGuard } from '@redmane/users';
+import { ToastModule } from 'primeng/toast';
 
 
 const routes: Routes = [
@@ -42,7 +43,8 @@ const routes: Routes = [
         InputNumberModule,
         InputMaskModule,
         StoreModule.forFeature(fromUsers.USERS_FEATURE_KEY, fromUsers.reducer),
-        EffectsModule.forFeature([UsersEffects])
+        EffectsModule.forFeature([UsersEffects]),
+        ToastModule
     ],
     declarations: [LoginComponent, ProfileComponent],
     providers: [UsersFacade],

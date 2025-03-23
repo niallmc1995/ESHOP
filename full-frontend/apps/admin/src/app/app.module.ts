@@ -42,6 +42,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NgxStripeModule } from 'ngx-stripe';
 import {FileUploadModule} from 'primeng/fileupload';
+import { VerifyCodeComponent } from './pages/users/users-verify-code/verify-code.component';
+import { ResetPasswordComponent } from './pages/users/users-reset-password/reset-password.component';
 
 const UX_MODULE = [
     CardModule,
@@ -77,7 +79,9 @@ const UX_MODULE = [
         UsersFormComponent,
         UsersListComponent,
         OrdersListComponent,
-        OrdersDetailComponent
+        OrdersDetailComponent,
+        VerifyCodeComponent,
+        ResetPasswordComponent
     ],
     imports: [
         BrowserModule,

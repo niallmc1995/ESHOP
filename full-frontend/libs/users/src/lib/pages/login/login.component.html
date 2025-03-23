@@ -7,16 +7,18 @@
             <div class="col-6 p-5">
                 <h3>Welcome!</h3>
                 <h2>Login Page</h2>
-                <form [formGroup]="loginFormGroup">
+
+                <!-- Main Login Form -->
+                <form [formGroup]="loginFormGroup" *ngIf="!showResetPassword">
                     <div class="grid mt-4 p-fluid">
                         <div class="col-12">
                             <div class="p-inputgroup">
                                 <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
                                 <input type="text" formControlName="email" pInputText placeholder="Email" />
                             </div>
-                            <small *ngIf="loginForm.email.invalid && isSubmitted" class="p-error">
-                                <span *ngIf="loginForm.email.errors.required">Email is required</span>
-                                <span *ngIf="loginForm.email.errors.email">Email is invalid</span>
+                            <small *ngIf="loginForm['email'].invalid && isSubmitted" class="p-error">
+                                <span *ngIf="loginForm['email'].errors?.['required']">Email is required</span>
+                                <span *ngIf="loginForm['email'].errors?.['email']">Email is invalid</span>
                             </small>
                         </div>
                         <div class="col-12">
@@ -24,13 +26,16 @@
                                 <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
                                 <input type="password" formControlName="password" pInputText placeholder="Password" />
                             </div>
-                            <small *ngIf="loginForm.password.invalid && isSubmitted" class="p-error"> Password is required </small>
+                            <small *ngIf="loginForm['password'].invalid && isSubmitted" class="p-error">Password is required</small>
                         </div>
                         <div class="col-12">
-                            <p-button class="p-button-lg full-btn" label="Submit" (onClick)="onSubmit()"></p-button>
+                            <p-button class="p-button-lg full-btn" label="Login" (onClick)="onSubmit()" [loading]="isLoading"></p-button>
+                        </div>
+                        <div class="col-12 text-center mt-3">
+                            <a href="javascript:void(0)" (click)="showForgotPassword()">Forgot Password?</a>
                         </div>
                         <div class="col-12">
-                          <small *ngIf="isSubmitted && authError" class="p-error">{{authMessage}}</small>
+                            <small *ngIf="isSubmitted && authError" class="p-error">{{authMessage}}</small>
                         </div>
                     </div>
                 </form>
@@ -38,3 +43,5 @@
         </div>
     </div>
 </div>
+
+<p-toast></p-toast>

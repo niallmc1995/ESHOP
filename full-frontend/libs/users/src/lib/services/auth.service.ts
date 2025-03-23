@@ -27,4 +27,20 @@ export class AuthService {
     this.token.removeToken();
     this.router.navigate(['/login']);
   }
+
+  sendResetPasswordCode(email: string): Observable<any> {
+    return this.http.post(`${this.apiURLUsers}/reset-password-code`, { email });
+  }
+
+  verifyResetCode(email: string, code: string): Observable<any> {
+    return this.http.post(`${this.apiURLUsers}/verify-reset-code`, { email, code });
+  }
+
+  resetPassword(email: string, code: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiURLUsers}/reset-password`, {
+      email,
+      code,
+      newPassword
+    });
+  }
 }

@@ -1,28 +1,38 @@
-const {User} = require('../models/user');
+const { User } = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+require('dotenv').config(); // Load environment variables
 
-router.get(`/`, async (req, res) =>{
+// Set up nodemailer transporter to use MailHog
+const transporter = nodemailer.createTransport({
+    host: 'localhost', // MailHog SMTP server
+    port: 1025, // MailHog SMTP port
+    secure: false, // true for 465, false for other ports
+});
+
+router.get(`/`, async(req, res) => {
     const userList = await User.find().select('-passwordHash');
 
-    if(!userList) {
-        res.status(500).json({success: false})
-    } 
+    if (!userList) {
+        res.status(500).json({ success: false })
+    }
     res.send(userList);
 })
 
-router.get('/:id', async(req,res)=>{
+router.get('/:id', async(req, res) => {
     const user = await User.findById(req.params.id).select('-passwordHash');
 
-    if(!user) {
-        res.status(500).json({message: 'The user with the given ID was not found.'})
-    } 
+    if (!user) {
+        res.status(500).json({ message: 'The user with the given ID was not found.' })
+    }
     res.status(200).send(user);
 })
 
-router.post('/', async (req,res)=>{
+router.post('/', async(req, res) => {
     let user = new User({
         name: req.body.name,
         email: req.body.email,
@@ -37,25 +47,24 @@ router.post('/', async (req,res)=>{
     })
     user = await user.save();
 
-    if(!user)
-    return res.status(400).send('the user cannot be created!')
+    if (!user)
+        return res.status(400).send('the user cannot be created!')
 
     res.send(user);
 })
 
-router.put('/:id',async (req, res)=> {
+router.put('/:id', async(req, res) => {
 
     const userExist = await User.findById(req.params.id);
     let newPassword
-    if(req.body.password) {
+    if (req.body.password) {
         newPassword = bcrypt.hashSync(req.body.password, 10)
     } else {
         newPassword = userExist.passwordHash;
     }
 
     const user = await User.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
             name: req.body.name,
             email: req.body.email,
             passwordHash: newPassword,
@@ -66,43 +75,40 @@ router.put('/:id',async (req, res)=> {
             zip: req.body.zip,
             city: req.body.city,
             country: req.body.country,
-        },
-        { new: true}
+        }, { new: true }
     )
 
-    if(!user)
-    return res.status(400).send('the user cannot be created!')
+    if (!user)
+        return res.status(400).send('the user cannot be created!')
 
     res.send(user);
 })
 
-router.post('/login', async (req,res) => {
-    const user = await User.findOne({email: req.body.email})
+router.post('/login', async(req, res) => {
+    const user = await User.findOne({ email: req.body.email })
     const secret = process.env.secret;
-    if(!user) {
+    if (!user) {
         return res.status(400).send('The user not found');
     }
 
-    if(user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
-        const token = jwt.sign(
-            {
+    if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
+        const token = jwt.sign({
                 userId: user.id,
                 isAdmin: user.isAdmin
             },
-            secret,
-            {expiresIn : '1d'}
+            secret, { expiresIn: '1d' }
         )
-       
-        res.status(200).send({user: user.email , token: token}) 
+
+        res.status(200).send({ user: user.email, token: token })
     } else {
-       res.status(400).send('password is wrong!');
+        res.status(400).send('password is wrong!');
     }
 
-    
+
 })
 
 
-router.post('/register', async (req,res)=>{
+router.post('/register', async(req, res) => {
     let user = new User({
         name: req.body.name,
         email: req.body.email,
@@ -117,35 +123,144 @@ router.post('/register', async (req,res)=>{
     })
     user = await user.save();
 
-    if(!user)
-    return res.status(400).send('the user cannot be created!')
+    if (!user)
+        return res.status(400).send('the user cannot be created!')
 
     res.send(user);
 })
 
 
-router.delete('/:id', (req, res)=>{
-    User.findByIdAndRemove(req.params.id).then(user =>{
-        if(user) {
-            return res.status(200).json({success: true, message: 'the user is deleted!'})
+router.delete('/:id', (req, res) => {
+    User.findByIdAndRemove(req.params.id).then(user => {
+        if (user) {
+            return res.status(200).json({ success: true, message: 'the user is deleted!' })
         } else {
-            return res.status(404).json({success: false , message: "user not found!"})
+            return res.status(404).json({ success: false, message: "user not found!" })
         }
-    }).catch(err=>{
-       return res.status(500).json({success: false, error: err}) 
+    }).catch(err => {
+        return res.status(500).json({ success: false, error: err })
     })
 })
 
-router.get(`/get/count`, async (req, res) =>{
+router.get(`/get/count`, async(req, res) => {
     const userCount = await User.countDocuments((count) => count)
 
-    if(!userCount) {
-        res.status(500).json({success: false})
-    } 
+    if (!userCount) {
+        res.status(500).json({ success: false })
+    }
     res.send({
         userCount: userCount
     });
 })
 
+router.post('/reset-password-code', async(req, res) => {
+    const { email } = req.body;
 
-module.exports =router;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        const token = user.generateResetToken();
+        await user.save();
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: user.email,
+            subject: 'Password Reset Code',
+            text: `Your password reset code is: ${token}`,
+        };
+
+        await transporter.sendMail(mailOptions);
+        res.status(200).send('Reset password code sent to your email');
+    } catch (error) {
+        console.error('Error sending reset password code:', error);
+        res.status(500).send('Error sending email');
+    }
+});
+
+// full-backend/routes/user.js
+router.get('/reset/:token', async(req, res) => {
+    try {
+        const user = await User.findOne({
+            resetPasswordToken: req.params.token,
+            resetPasswordExpires: { $gt: Date.now() } // Check if token is not expired
+        });
+
+        if (!user) {
+            return res.status(400).send('Token is invalid or has expired');
+        }
+
+        // If the token is valid, render a password reset form or return a success message
+        res.status(200).send('Token is valid, you can reset your password');
+    } catch (error) {
+        console.error('Error verifying token:', error);
+        res.status(500).send('Error verifying token');
+    }
+});
+
+router.post('/verify-reset-code', async(req, res) => {
+    const { email, code } = req.body; // Get email and code from the request
+
+    try {
+        const user = await User.findOne({
+            email,
+            resetPasswordToken: code, // Check if the code matches
+            resetPasswordExpires: { $gt: Date.now() } // Check if the token is not expired
+        });
+
+        if (!user) {
+            return res.status(400).send('Invalid or expired code');
+        }
+
+        // If the code is valid, allow the user to reset their password
+        res.status(200).send('Code is valid, you can reset your password');
+    } catch (error) {
+        console.error('Error verifying reset code:', error);
+        res.status(500).send('Error verifying code');
+    }
+});
+
+// Function to generate a 6-digit code
+const generateResetCode = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a random 6-digit code
+};
+
+router.post('/reset-password', async(req, res) => {
+    const { email, newPassword } = req.body; // Get email, code, and new password from the request
+
+    try {
+        // Generate a new reset code and send it via email
+        const resetCode = generateResetCode();
+        // Implement your email sending logic here
+        // await sendEmail(email, resetCode); // Uncomment and implement this function
+
+        const user = await User.findOne({
+            email,
+            resetPasswordToken: resetCode, // Check if the code matches
+            resetPasswordExpires: { $gt: Date.now() } // Check if the token is not expired
+        });
+
+        if (!user) {
+            return res.status(400).send('Invalid or expired code');
+        }
+
+        // Update the user's password
+        user.passwordHash = newPassword; // Make sure to hash the password before saving
+        user.resetPasswordToken = undefined; // Clear the reset token
+        user.resetPasswordExpires = undefined; // Clear the expiration
+        await user.save(); // Save the updated user
+
+        res.status(200).send('Password has been reset successfully');
+    } catch (error) {
+        console.error('Error resetting password:', error);
+        res.status(500).send('Error resetting password');
+    }
+});
+
+// Example of sending the generated code via email (you'll need to implement the email sending logic)
+// const resetCode = generateResetCode();
+// sendEmail(email, resetCode); // Implement sendEmail function to send the code
+
+module.exports = router;

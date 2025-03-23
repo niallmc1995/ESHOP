@@ -16,6 +16,8 @@ function authJwt() {
             { url: /\/api\/v1\/orders(.*)/, methods: ['POST', 'OPTIONS'] },
             `${api}/users/login`,
             `${api}/users/register`,
+            `${api}/users/reset-password-code`,
+            { url: new RegExp(`${api}/users/reset/.+`), methods: ['GET', 'OPTIONS'] },
         ]
     });
 }

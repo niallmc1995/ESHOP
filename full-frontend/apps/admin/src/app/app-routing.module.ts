@@ -11,6 +11,8 @@ import { ProductsListComponent } from './pages/products/products-list/products-l
 import { UsersFormComponent } from './pages/users/users-form/users-form.component';
 import { UsersListComponent } from './pages/users/users-list/users-list.component';
 import { ShellComponent } from './shared/shell/shell.component';
+import { VerifyCodeComponent } from './pages/users/users-verify-code/verify-code.component';
+import { ResetPasswordComponent } from './pages/users/users-reset-password/reset-password.component';
 
 const routes: Routes = [
     {
@@ -67,6 +69,14 @@ const routes: Routes = [
                 component: OrdersDetailComponent
             }
         ]
+    },
+    {
+        path: 'verify-code',
+        component: VerifyCodeComponent
+    },
+    {
+        path: 'reset-password',
+        component: ResetPasswordComponent
     },
     {
         path: '**',
