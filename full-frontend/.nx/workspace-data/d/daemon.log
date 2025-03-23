@@ -978,3 +978,16 @@ Error: This workspace is more than three days old and is not connected. Workspac
 [NX v20.6.2 Daemon Server] - 2025-03-23T22:06:16.202Z - [WATCHER]: Processing file changes in outputs
 [NX v20.6.2 Daemon Server] - 2025-03-23T22:06:16.603Z - [WATCHER]: Processing file changes in outputs
 [NX v20.6.2 Daemon Server] - 2025-03-23T22:06:16.699Z - [WATCHER]: Processing file changes in outputs
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.561Z - [WATCHER]: Processing file changes in outputs
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.563Z - [WATCHER]: libs/users/src/lib/pages/login/login.component.ts was modified
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.770Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.771Z - [REQUEST]: libs/users/src/lib/pages/login/login.component.ts
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.771Z - [REQUEST]: 
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.774Z - Time taken for 'hash changed files from watcher' 0.45340000092983246ms
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.801Z - Time taken for 'build-project-configs' 23.23809999972582ms
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.841Z - [SYNC]: collect registered sync generators
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.842Z - [SYNC]: project graph hash is the same, not collecting task sync generators
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.842Z - [SYNC]: nx.json hash is the same, not collecting global sync generators
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:08:44.842Z - Time taken for 'total execution time for createProjectGraph()' 30.93589999899268ms
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:09:45.756Z - [WATCHER]: Processing file changes in outputs
+[NX v20.6.2 Daemon Server] - 2025-03-23T22:09:45.868Z - [WATCHER]: Processing file changes in outputs
