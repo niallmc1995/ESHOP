@@ -14,9 +14,9 @@
                                 <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
                                 <input type="text" formControlName="email" pInputText placeholder="Email" />
                             </div>
-                            <small *ngIf="loginForm.email.invalid && isSubmitted" class="p-error">
-                                <span *ngIf="loginForm.email.errors.required">Email is required</span>
-                                <span *ngIf="loginForm.email.errors.email">Email is invalid</span>
+                            <small *ngIf="loginForm['email'].invalid && isSubmitted" class="p-error">
+                                <span *ngIf="loginForm['email'].errors?.['required']">Email is required</span>
+                                <span *ngIf="loginForm['email'].errors?.['email']">Email is invalid</span>
                             </small>
                         </div>
                         <div class="col-12">
@@ -24,13 +24,13 @@
                                 <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
                                 <input type="password" formControlName="password" pInputText placeholder="Password" />
                             </div>
-                            <small *ngIf="loginForm.password.invalid && isSubmitted" class="p-error"> Password is required </small>
+                            <small *ngIf="loginForm['password'].invalid && isSubmitted" class="p-error">Password is required</small>
                         </div>
                         <div class="col-12">
                             <p-button class="p-button-lg full-btn" label="Submit" (onClick)="onSubmit()"></p-button>
                         </div>
                         <div class="col-12">
-                          <small *ngIf="isSubmitted && authError" class="p-error">{{authMessage}}</small>
+                            <small *ngIf="isSubmitted && authError" class="p-error">{{authMessage}}</small>
                         </div>
                     </div>
                 </form>

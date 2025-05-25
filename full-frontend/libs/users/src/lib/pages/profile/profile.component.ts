@@ -54,15 +54,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(user => {
       if(user){
-        this.userId = user.id;
-        this.checkoutForm.name.setValue(user.name);
-        this.checkoutForm.email.setValue(user.email);
-        this.checkoutForm.phone.setValue(user.phone);
-        this.checkoutForm.city.setValue(user.city);
-        this.checkoutForm.country.setValue(user.country);
-        this.checkoutForm.zip.setValue(user.zip);
-        this.checkoutForm.apartment.setValue(user.apartment);
-        this.checkoutForm.street.setValue(user.street);
+        this.userId = user.id || '';
+        this.checkoutForm['name'].setValue(user.name || '');
+        this.checkoutForm['email'].setValue(user.email || '');
+        this.checkoutForm['phone'].setValue(user.phone || '');
+        this.checkoutForm['city'].setValue(user.city);
+        this.checkoutForm['country'].setValue(user.country);
+        this.checkoutForm['zip'].setValue(user.zip);
+        this.checkoutForm['apartment'].setValue(user.apartment);
+        this.checkoutForm['street'].setValue(user.street);
 
       }
     })
