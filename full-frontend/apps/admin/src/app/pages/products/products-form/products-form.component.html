@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <div class="admin-page">
     <p-card [header]="editmode ? 'Edit Product' : 'Add Product'" subheader="You can add or edit products here">
-        <div class="grid mb-5">
+        <div class="grid mb-5 sticky-toolbar">
             <div class="col-12">
                 <p-toolbar>
                     <div class="p-toolbar-group-left"></div>
@@ -74,12 +74,36 @@
                                 <img style="width: 100%" [src]="imageDisplay" alt="" />
                             </div>
                         </div>
-                        <div class="p-field col">
-                            <label for="gallery">Gallery Images</label>
+                        <!-- Upload Gallery -->
+                        <div class="p-field col-12">
+                            <label>Gallery Images</label>
                             <input type="file" multiple (change)="onGalleryUpload($event)" accept="image/*" />
-                            <div class="grid mt-2">
-                                <div class="col-2" *ngFor="let image of galleryPreview">
-                                    <img [src]="image" style="width: 100%" />
+
+                            <!-- Existing images -->
+                            <div class="grid mt-2" *ngIf="existingGalleryImages.length > 0">
+                                <div class="col-2" *ngFor="let img of existingGalleryImages; let i = index">
+                                    <img [src]="img" style="width: 100%" />
+                                    <button
+                                        pButton
+                                        type="button"
+                                        icon="pi pi-times"
+                                        class="p-button-danger p-button-sm mt-1"
+                                        (click)="removeExistingImage(i)"
+                                    ></button>
+                                </div>
+                            </div>
+
+                            <!-- Preview newly uploaded -->
+                            <div class="grid mt-2" *ngIf="galleryPreview.length > 0">
+                                <div class="col-2" *ngFor="let preview of galleryPreview; let i = index">
+                                    <img [src]="preview" style="width: 100%" />
+                                    <button
+                                        pButton
+                                        type="button"
+                                        icon="pi pi-times"
+                                        class="p-button-danger p-button-sm mt-1"
+                                        (click)="removeNewGalleryImage(i)"
+                                    ></button>
                                 </div>
                             </div>
                         </div>

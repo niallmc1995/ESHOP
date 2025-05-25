@@ -20,6 +20,7 @@ export class ProductsFormComponent implements OnInit {
     currentProductId: string;
     galleryFiles: File[] = [];
     galleryPreview: string[] = [];
+    existingGalleryImages: string[] = []; // For images already saved in DB
     image: File | null = null;
 
     constructor(
@@ -81,31 +82,30 @@ export class ProductsFormComponent implements OnInit {
         );
     }
 
-private _updateProduct(productFormData: FormData) {
-    this.productsService.updateProduct(productFormData, this.currentProductId).subscribe({
-        next: () => {
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Product is updated!'
-            });
+    private _updateProduct(productFormData: FormData) {
+        this.productsService.updateProduct(productFormData, this.currentProductId).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'Product is updated!'
+                });
 
-            // Delay 2s before navigating back
-            // timer(2000).subscribe(() => {
-            //     this.location.back();
-            // });
-        },
-        error: (error) => {
-            console.error('Update failed:', error);
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Product is not updated!'
-            });
-        }
-    });
-}
-
+                // Delay 2s before navigating back
+                // timer(2000).subscribe(() => {
+                //     this.location.back();
+                // });
+            },
+            error: (error) => {
+                console.error('Update failed:', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Product is not updated!'
+                });
+            }
+        });
+    }
 
     private _checkEditMode() {
         this.route.params.subscribe((params) => {
@@ -122,6 +122,7 @@ private _updateProduct(productFormData: FormData) {
                     this.productForm.description.setValue(product.description);
                     this.productForm.richDescription.setValue(product.richDescription);
                     this.imageDisplay = product.image;
+                    this.existingGalleryImages = product.images || [];
                     this.productForm.image.setValidators([]);
                     this.productForm.image.updateValueAndValidity();
                 });
@@ -129,31 +130,32 @@ private _updateProduct(productFormData: FormData) {
         });
     }
 
+    removeExistingImage(index: number) {
+        this.existingGalleryImages.splice(index, 1);
+    }
+
+    removeNewGalleryImage(index: number) {
+        this.galleryFiles.splice(index, 1);
+        this.galleryPreview.splice(index, 1);
+    }
+
     onSubmit() {
         this.isSubmitted = true;
         if (this.form.invalid) return;
 
         const productFormData = new FormData();
-
-        // Append form fields
         Object.keys(this.productForm).forEach((key) => {
-            const controlValue = this.productForm[key].value;
-            if (controlValue !== null && controlValue !== undefined) {
-                productFormData.append(key, controlValue);
+            const value = this.productForm[key].value;
+            if (value !== null && value !== undefined) {
+                productFormData.append(key, value);
             }
         });
 
-        // Append single image
-        if (this.image) {
-            productFormData.append('image', this.image);
-        }
+        // Retained existing images
+        this.existingGalleryImages.forEach((url) => productFormData.append('existingImages', url));
 
-        // Append gallery images
-        if (this.galleryFiles && this.galleryFiles.length > 0) {
-            this.galleryFiles.forEach((file) => {
-                productFormData.append('images', file);
-            });
-        }
+        // Newly added images
+        this.galleryFiles.forEach((file) => productFormData.append('images', file));
 
         if (this.editmode) {
             this._updateProduct(productFormData);
@@ -180,12 +182,11 @@ private _updateProduct(productFormData: FormData) {
     }
 
     onGalleryUpload(event: Event) {
-        const target = event.target as HTMLInputElement;
-        if (target.files) {
-            this.galleryFiles = Array.from(target.files);
-            this.galleryPreview = [];
-
-            this.galleryFiles.forEach((file) => {
+        const input = event.target as HTMLInputElement;
+        if (input.files) {
+            const newFiles = Array.from(input.files);
+            newFiles.forEach((file) => {
+                this.galleryFiles.push(file);
                 const reader = new FileReader();
                 reader.onload = () => {
                     this.galleryPreview.push(reader.result as string);
@@ -194,6 +195,7 @@ private _updateProduct(productFormData: FormData) {
             });
         }
     }
+
     get productForm() {
         return this.form.controls;
     }

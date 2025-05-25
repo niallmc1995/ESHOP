@@ -22,168 +22,36 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "styles/apps/admin/dashboard.scss",
-        "hash": "11684890210258055975"
-      },
-      {
-        "file": "styles/libs/products/products-search.scss",
-        "hash": "11851697601260999802"
-      },
-      {
-        "file": "styles/libs/products/categories-banner.scss",
-        "hash": "6966503240051695653"
-      },
-      {
-        "file": "decorate-angular-cli.js",
-        "hash": "11823390707371404862"
-      },
-      {
-        "file": "styles/apps/shop/pages/home-page.scss",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "environments/environment.prod.ts",
-        "hash": "5299199262619336807"
-      },
-      {
-        "file": "styles/libs/products/products.scss",
-        "hash": "13293440961837303883"
-      },
-      {
-        "file": ".prettierignore",
-        "hash": "1324685984948235314"
-      },
-      {
-        "file": "styles/libs/orders/orders.scss",
-        "hash": "11236352361639738408"
-      },
-      {
-        "file": "apps/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9816718638912409954"
-      },
-      {
-        "file": "styles/libs/ui/ui.scss",
-        "hash": "7559399906510422509"
-      },
-      {
-        "file": "styles/apps/shop/shared/header.scss",
-        "hash": "15904182752382022100"
+        "file": "tools/tsconfig.tools.json",
+        "hash": "11810713488198132402"
       },
       {
         "file": "styles/libs/products/product-page.scss",
         "hash": "7354483838474792392"
       },
       {
-        "file": "jest.preset.js",
-        "hash": "17666962557300311861"
-      },
-      {
         "file": "styles/libs/ui/gallery.scss",
         "hash": "15068667856635571662"
       },
       {
-        "file": "styles/base/fonts.scss",
-        "hash": "17849882922875894668"
-      },
-      {
-        "file": "tools/tsconfig.tools.json",
-        "hash": "11810713488198132402"
-      },
-      {
-        "file": "styles/base/mixins.scss",
-        "hash": "2265879479549929976"
-      },
-      {
-        "file": "styles/base/configuration.scss",
-        "hash": "2104915894611954995"
-      },
-      {
-        "file": "styles/apps/shop/shared/nav.scss",
-        "hash": "609106520998018712"
-      },
-      {
-        "file": "tools/generators/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "styles/libs/ui/banner.scss",
-        "hash": "7315870755691673712"
-      },
-      {
-        "file": "environments/environment.ts",
-        "hash": "5600495229641380509"
-      },
-      {
-        "file": "package-lock.json",
-        "hash": "7901580501052878826"
-      },
-      {
-        "file": ".vscode/settings.json",
-        "hash": "10944149396246485144"
-      },
-      {
-        "file": "styles/libs/ui/slider.scss",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "styles/libs/users/login-register.scss",
-        "hash": "17075637386270993510"
-      },
-      {
-        "file": "styles/libs/products/product-item.scss",
-        "hash": "15528509158631174751"
-      },
-      {
-        "file": "styles/libs/orders/cart.scss",
-        "hash": "5273266474012533158"
+        "file": "styles/libs/orders/orders.scss",
+        "hash": "11236352361639738408"
       },
       {
         "file": "migrations.json",
         "hash": "15411781798856345934"
       },
       {
-        "file": "styles/libs/users/users.scss",
-        "hash": "12679336895911824637"
-      },
-      {
         "file": "styles/libs/orders/checkout.scss",
         "hash": "12676978919544389191"
       },
       {
-        "file": "styles/apps/admin/shell.scss",
-        "hash": "1621431469632303821"
+        "file": "styles/libs/products/products.scss",
+        "hash": "13293440961837303883"
       },
       {
-        "file": "package.json",
-        "hash": "6740033924859857328"
-      },
-      {
-        "file": "jest.config.ts",
-        "hash": "3069074216761126282"
-      },
-      {
-        "file": "styles/apps/shop/pages/product-list-page.scss",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": ".prettierrc",
-        "hash": "6009788578335382023"
-      },
-      {
-        "file": "styles/admin.scss",
-        "hash": "1976417087975081075"
-      },
-      {
-        "file": "styles/ngshop.scss",
-        "hash": "801918758564214546"
-      },
-      {
-        "file": ".editorconfig",
-        "hash": "11532813898455409296"
+        "file": "styles/libs/ui/banner.scss",
+        "hash": "7315870755691673712"
       },
       {
         "file": "libs/.gitkeep",
@@ -198,20 +66,152 @@
         "hash": "6942095277190108596"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "1049151320640615834"
+        "file": "package.json",
+        "hash": "6740033924859857328"
+      },
+      {
+        "file": "styles/apps/shop/pages/home-page.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "styles/base/configuration.scss",
+        "hash": "2104915894611954995"
+      },
+      {
+        "file": "styles/libs/orders/cart.scss",
+        "hash": "5273266474012533158"
+      },
+      {
+        "file": "tools/generators/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "styles/libs/products/products-search.scss",
+        "hash": "11851697601260999802"
+      },
+      {
+        "file": "styles/admin.scss",
+        "hash": "5201014982151301698"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "5628738610252882264"
       },
       {
         "file": "styles/base/colors.scss",
         "hash": "15025613294013347700"
       },
       {
+        "file": "tsconfig.base.json",
+        "hash": "1049151320640615834"
+      },
+      {
+        "file": "jest.preset.js",
+        "hash": "17666962557300311861"
+      },
+      {
+        "file": ".editorconfig",
+        "hash": "11532813898455409296"
+      },
+      {
+        "file": "styles/ngshop.scss",
+        "hash": "801918758564214546"
+      },
+      {
+        "file": "styles/apps/admin/shell.scss",
+        "hash": "1621431469632303821"
+      },
+      {
+        "file": "styles/libs/users/users.scss",
+        "hash": "12679336895911824637"
+      },
+      {
+        "file": "decorate-angular-cli.js",
+        "hash": "11823390707371404862"
+      },
+      {
+        "file": "apps/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "styles/libs/products/product-item.scss",
+        "hash": "15528509158631174751"
+      },
+      {
+        "file": "jest.config.ts",
+        "hash": "3069074216761126282"
+      },
+      {
+        "file": "environments/environment.ts",
+        "hash": "5600495229641380509"
+      },
+      {
+        "file": "environments/environment.prod.ts",
+        "hash": "5299199262619336807"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9816718638912409954"
+      },
+      {
+        "file": "styles/apps/admin/dashboard.scss",
+        "hash": "11684890210258055975"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "1324685984948235314"
+      },
+      {
+        "file": "styles/base/fonts.scss",
+        "hash": "17849882922875894668"
+      },
+      {
+        "file": "styles/libs/users/login-register.scss",
+        "hash": "17075637386270993510"
+      },
+      {
+        "file": ".vscode/settings.json",
+        "hash": "10944149396246485144"
+      },
+      {
+        "file": "styles/apps/shop/shared/nav.scss",
+        "hash": "609106520998018712"
+      },
+      {
+        "file": "styles/base/mixins.scss",
+        "hash": "2265879479549929976"
+      },
+      {
+        "file": "styles/libs/ui/slider.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "styles/apps/shop/shared/header.scss",
+        "hash": "15904182752382022100"
+      },
+      {
+        "file": "styles/apps/shop/pages/product-list-page.scss",
+        "hash": "3244421341483603138"
+      },
+      {
         "file": ".eslintrc.json",
         "hash": "15167530091372475270"
       },
       {
-        "file": ".gitignore",
-        "hash": "5628738610252882264"
+        "file": "package-lock.json",
+        "hash": "7901580501052878826"
+      },
+      {
+        "file": "styles/libs/products/categories-banner.scss",
+        "hash": "6966503240051695653"
+      },
+      {
+        "file": "styles/libs/ui/ui.scss",
+        "hash": "7559399906510422509"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "6009788578335382023"
       }
     ],
     "projectFileMap": {
@@ -306,11 +306,11 @@
         },
         {
           "file": "apps/admin/src/app/pages/products/products-form/products-form.component.html",
-          "hash": "10470708484304237520"
+          "hash": "6029731442432573446"
         },
         {
           "file": "apps/admin/src/app/pages/products/products-form/products-form.component.ts",
-          "hash": "1167573726217297103"
+          "hash": "557676038524612440"
         },
         {
           "file": "apps/admin/src/app/pages/products/products-list/products-list.component.html",

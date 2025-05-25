@@ -20,3 +20,12 @@
 @import './libs/users/users.scss';
 
 
+.sticky-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Adjust as needed to sit above other content */
+    background-color: #fff; /* Ensure it doesn’t become transparent */
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional for visual separation */
+}
