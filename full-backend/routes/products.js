@@ -83,47 +83,76 @@ router.post(`/`, uploadOptions.single('image'), async(req, res) => {
     res.send(product);
 });
 
-router.put('/:id', uploadOptions.single('image'), async(req, res) => {
-    if (!mongoose.isValidObjectId(req.params.id)) {
-        return res.status(400).send('Invalid Product Id');
+router.put(
+    '/:id',
+    uploadOptions.fields([
+        { name: 'image', maxCount: 1 },
+        { name: 'images', maxCount: 10 }
+    ]),
+    async (req, res) => {
+        const { id } = req.params;
+
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).send('Invalid Product ID');
+        }
+
+        const category = await Category.findById(req.body.category);
+        if (!category) {
+            return res.status(400).send('Invalid Category');
+        }
+
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).send('Product not found');
+        }
+
+        // 🔽 PLACE THIS SNIPPET HERE
+        const imageFile = req.files?.image?.[0];
+        const galleryFiles = req.files?.images || [];
+
+        let imagePath = product.image;
+        if (imageFile) {
+            const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+            imagePath = `${basePath}${imageFile.filename}`;
+        }
+
+        let galleryPaths = product.images || [];
+        if (galleryFiles.length > 0) {
+            const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+            galleryPaths = galleryFiles.map((file) => `${basePath}${file.filename}`);
+        }
+
+        try {
+            const updatedProduct = await Product.findByIdAndUpdate(
+                id,
+                {
+                    name: req.body.name,
+                    description: req.body.description,
+                    richDescription: req.body.richDescription,
+                    image: imagePath,
+                    images: galleryPaths,
+                    brand: req.body.brand,
+                    price: req.body.price,
+                    category: req.body.category,
+                    countInStock: req.body.countInStock,
+                    rating: req.body.rating,
+                    numReviews: req.body.numReviews,
+                    isFeatured: req.body.isFeatured
+                },
+                { new: true }
+            );
+
+            if (!updatedProduct) {
+                return res.status(500).send('Product update failed');
+            }
+
+            res.status(200).send(updatedProduct);
+        } catch (error) {
+            console.error('Error updating product:', error);
+            res.status(500).send('Internal Server Error');
+        }
     }
-    const category = await Category.findById(req.body.category);
-    if (!category) return res.status(400).send('Invalid Category');
-
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(400).send('Invalid Product!');
-
-    const file = req.file;
-    let imagepath;
-
-    if (file) {
-        const fileName = file.filename;
-        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-        imagepath = `${basePath}${fileName}`;
-    } else {
-        imagepath = product.image;
-    }
-
-    const updatedProduct = await Product.findByIdAndUpdate(
-        req.params.id, {
-            name: req.body.name,
-            description: req.body.description,
-            richDescription: req.body.richDescription,
-            image: imagepath,
-            brand: req.body.brand,
-            price: req.body.price,
-            category: req.body.category,
-            countInStock: req.body.countInStock,
-            rating: req.body.rating,
-            numReviews: req.body.numReviews,
-            isFeatured: req.body.isFeatured
-        }, { new: true }
-    );
-
-    if (!updatedProduct) return res.status(500).send('the product cannot be updated!');
-
-    res.send(updatedProduct);
-});
+);
 
 router.delete('/:id', (req, res) => {
     Product.findByIdAndRemove(req.params.id)

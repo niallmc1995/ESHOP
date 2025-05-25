@@ -65,7 +65,6 @@
                         <div class="p-field col-12">
                             <label for="richDescription">Product Details</label><br />
                             <p-editor formControlName="richDescription" [style]="{ height: '320px' }"></p-editor>
-
                         </div>
                         <div class="p-field col">
                             <label for="name">Main Image</label>
@@ -73,6 +72,15 @@
                             <small *ngIf="productForm.image.invalid && isSubmitted" class="p-error">Image is required</small>
                             <div class="col-2 mt-2 p-pl-0">
                                 <img style="width: 100%" [src]="imageDisplay" alt="" />
+                            </div>
+                        </div>
+                        <div class="p-field col">
+                            <label for="gallery">Gallery Images</label>
+                            <input type="file" multiple (change)="onGalleryUpload($event)" accept="image/*" />
+                            <div class="grid mt-2">
+                                <div class="col-2" *ngFor="let image of galleryPreview">
+                                    <img [src]="image" style="width: 100%" />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -45,4 +45,9 @@ export class ProductsService {
     getFeaturedProducts(count: number): Observable<Product[]> {
         return this.http.get<Product[]>(`${this.apiURLProducts}/get/featured/${count}`);
     }
+
+    uploadProductGallery(productData: FormData, productId: string): Observable<any> {
+    return this.http.put(`${this.apiURLProducts}/products/gallery-images/${productId}`, productData);
+}
+
 }
