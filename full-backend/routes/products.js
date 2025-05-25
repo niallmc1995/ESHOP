@@ -12,7 +12,7 @@ const FILE_TYPE_MAP = {
 };
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         const isValid = FILE_TYPE_MAP[file.mimetype];
         let uploadError = new Error('invalid image type');
 
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
         }
         cb(uploadError, 'public/uploads');
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         const fileName = file.originalname.split(' ').join('-');
         const extension = FILE_TYPE_MAP[file.mimetype];
         cb(null, `${fileName}-${Date.now()}.${extension}`);
@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
 
 const uploadOptions = multer({ storage: storage });
 
-router.get(`/`, async (req, res) => {
+router.get(`/`, async(req, res) => {
     let filter = {};
     if (req.query.categories) {
         filter = { category: req.query.categories.split(',') };
@@ -44,7 +44,7 @@ router.get(`/`, async (req, res) => {
     res.send(productList);
 });
 
-router.get(`/:id`, async (req, res) => {
+router.get(`/:id`, async(req, res) => {
     const product = await Product.findById(req.params.id).populate('category');
 
     if (!product) {
@@ -53,7 +53,7 @@ router.get(`/:id`, async (req, res) => {
     res.send(product);
 });
 
-router.post(`/`, uploadOptions.single('image'), async (req, res) => {
+router.post(`/`, uploadOptions.single('image'), async(req, res) => {
     const category = await Category.findById(req.body.category);
     if (!category) return res.status(400).send('Invalid Category');
 
@@ -83,7 +83,7 @@ router.post(`/`, uploadOptions.single('image'), async (req, res) => {
     res.send(product);
 });
 
-router.put('/:id', uploadOptions.single('image'), async (req, res) => {
+router.put('/:id', uploadOptions.single('image'), async(req, res) => {
     if (!mongoose.isValidObjectId(req.params.id)) {
         return res.status(400).send('Invalid Product Id');
     }
@@ -105,8 +105,7 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
             name: req.body.name,
             description: req.body.description,
             richDescription: req.body.richDescription,
@@ -118,8 +117,7 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
             rating: req.body.rating,
             numReviews: req.body.numReviews,
             isFeatured: req.body.isFeatured
-        },
-        { new: true }
+        }, { new: true }
     );
 
     if (!updatedProduct) return res.status(500).send('the product cannot be updated!');
@@ -144,8 +142,8 @@ router.delete('/:id', (req, res) => {
         });
 });
 
-router.get(`/get/count`, async (req, res) => {
-    const productCount = await Product.countDocuments((count) => count);
+router.get(`/get/count`, async(req, res) => {
+    const productCount = await Product.countDocuments();
 
     if (!productCount) {
         res.status(500).json({ success: false });
@@ -155,7 +153,7 @@ router.get(`/get/count`, async (req, res) => {
     });
 });
 
-router.get(`/get/featured/:count`, async (req, res) => {
+router.get(`/get/featured/:count`, async(req, res) => {
     const count = req.params.count ? req.params.count : 0;
     const products = await Product.find({ isFeatured: true }).limit(+count);
 
@@ -165,7 +163,7 @@ router.get(`/get/featured/:count`, async (req, res) => {
     res.send(products);
 });
 
-router.put('/gallery-images/:id', uploadOptions.array('images', 10), async (req, res) => {
+router.put('/gallery-images/:id', uploadOptions.array('images', 10), async(req, res) => {
     if (!mongoose.isValidObjectId(req.params.id)) {
         return res.status(400).send('Invalid Product Id');
     }
@@ -180,11 +178,9 @@ router.put('/gallery-images/:id', uploadOptions.array('images', 10), async (req,
     }
 
     const product = await Product.findByIdAndUpdate(
-        req.params.id,
-        {
+        req.params.id, {
             images: imagesPaths
-        },
-        { new: true }
+        }, { new: true }
     );
 
     if (!product) return res.status(500).send('the gallery cannot be updated!');

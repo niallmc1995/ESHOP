@@ -32,12 +32,7 @@ app.use(`${api}/users`, usersRoutes);
 app.use(`${api}/orders`, ordersRoutes);
 
 //Database
-mongoose
-    .connect(process.env.CONNECTION_STRING, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        // dbName: "eshop-database",
-    })
+mongoose.connect(process.env.CONNECTION_STRING)
     .then(() => {
         console.log("Database Connection is ready...");
     })

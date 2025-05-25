@@ -6,6 +6,7 @@ import { environment } from '@env/environment';
 import { map, switchMap } from 'rxjs/operators';
 import { OrderItem } from '../models/order-item';
 import { StripeService } from 'ngx-stripe';
+import {StripeError} from '@stripe/stripe-js';
 
 @Injectable({
     providedIn: 'root'
@@ -48,20 +49,22 @@ export class OrdersService {
         return this.http.get<any>(`${this.apiURLProducts}/${productId}`);
     }
 
-    createCheckoutSession(orderItem: OrderItem[]) {
-        return this.http.post(`${this.apiURLOrders}/create-checkout-session`, orderItem).pipe(
-            switchMap((session: { id: string }) => {
+    createCheckoutSession(orderItem: OrderItem[]): Observable<{ error: StripeError }> {
+        return this.http.post<{ id: string }>(`${this.apiURLOrders}/create-checkout-session`, orderItem).pipe(
+            switchMap((session) => {
                 return this.stripeService.redirectToCheckout({ sessionId: session.id });
             })
         );
     }
-
+    
     cacheOrderData(order: Order) {
         localStorage.setItem('orderData', JSON.stringify(order));
     }
     getCacheOrderData(): Order {
-        return JSON.parse(localStorage.getItem('orderData'));
+        const data = localStorage.getItem('orderData') || '{}';
+        return JSON.parse(data) as Order;
     }
+    
 
     removeCachedOrderData() {
         {

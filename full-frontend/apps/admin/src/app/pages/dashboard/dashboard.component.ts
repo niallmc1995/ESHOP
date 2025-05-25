@@ -20,22 +20,29 @@ export class DashboardComponent implements OnDestroy, OnInit {
 
 
 
-    ngOnInit(): void {
-      combineLatest([
+ngOnInit(): void {
+    combineLatest([
         this.ordersService.getOrdersCount(),
         this.productService.getProductsCount(),
         this.userService.getUsersCount(),
         this.ordersService.getTotalSales()
-      ]).pipe(takeUntil(this.endsubs$)).subscribe((values) => {
-        this.statistics = values;
-    this.endsubs$.complete();
-      });
-    }
+    ])
+    .pipe(takeUntil(this.endsubs$))
+    .subscribe({
+        next: (values) => {
+            this.statistics = values;
+        },
+        error: (err) => {
+            console.error('Dashboard loading error:', err);
+        }
+    });
+}
 
-    ngOnDestroy() {
-      this.endsubs$.next();
-      this.endsubs$.complete();
-    }
+ngOnDestroy(): void {
+    this.endsubs$.next();
+    this.endsubs$.complete();
+}
+
 
 
 }
