@@ -5,7 +5,7 @@ import { LocalstorageService } from './localstorage.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class CustomerAuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private localStorageService: LocalstorageService
@@ -21,8 +21,7 @@ export class AuthGuard implements CanActivate {
           return true;
         }
       } catch (error) {
-        // Invalid token format
-        console.error('Token parsing failed:', error);
+        console.error('Invalid token:', error);
       }
     }
 
@@ -30,7 +29,7 @@ export class AuthGuard implements CanActivate {
     return false;
   }
 
-  private _tokenExpired(expiration: number): boolean {
-    return Math.floor(new Date().getTime() / 1000) >= expiration;
+  private _tokenExpired(exp: number): boolean {
+    return Math.floor(Date.now() / 1000) >= exp;
   }
 }

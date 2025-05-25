@@ -14,7 +14,7 @@ import * as fromUsers from './state/users.reducer';
 import { UsersEffects } from './state/users.effects';
 import { UsersFacade } from './state/users.facade';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { AuthGuard } from '@redmane/users';
+import { CustomerAuthGuard} from '../lib/services/auth-guard-customer.service'
 
 
 const routes: Routes = [
@@ -25,7 +25,8 @@ const routes: Routes = [
     },
     {
         path: 'profile',
-        component: ProfileComponent
+        component: ProfileComponent,
+        canActivate: [CustomerAuthGuard] 
 
     }
 ];

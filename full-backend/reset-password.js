@@ -9,7 +9,7 @@ async function updatePassword() {
     try {
         await mongoose.connect(MONGO_URI);
 
-        const userEmail = 'niallmcaffrey@gmail.com'; // or use _id if preferred
+        const userEmail = 'test@gmail.com'; // or use _id if preferred
         const newPlainPassword = 'redmane1995';
         const newPasswordHash = bcrypt.hashSync(newPlainPassword, 10);
 

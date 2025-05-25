@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UsersService } from '@redmane/users';
+import { User, UsersService } from '@redmane/users';
 import { Subject, take, takeUntil } from 'rxjs';
-
+import { LocalstorageService } from '../../services/localstorage.service';
 
 @Component({
     selector: 'user-profile',
@@ -12,71 +12,104 @@ import { Subject, take, takeUntil } from 'rxjs';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
     constructor(
-      private router:Router,
-      private usersService: UsersService,
-      private formBuilder: FormBuilder,
-
+        private router: Router,
+        private usersService: UsersService,
+        private formBuilder: FormBuilder,
+        private localStorageService: LocalstorageService
     ) {}
 
     checkoutFormGroup: FormGroup;
     isSubmitted = false;
-    userId : string;
+    userId: string;
     countries = [];
-    unsubscribe$ : Subject<void> = new Subject();
+    unsubscribe$: Subject<void> = new Subject();
 
     ngOnInit(): void {
-      this._initCheckoutForm();
-    this._autoFillUserData();
-    this._getCountries();
+        this._initCheckoutForm();
+        this._getCountries();
+        this.userId = this.localStorageService.getUserIdFromToken();
+
+        if (this.userId) {
+            this.usersService
+                .getUser(this.userId)
+                .pipe(take(1))
+                .subscribe({
+                    next: (user) => {
+                        this.checkoutFormGroup.patchValue({
+                            name: user.name,
+                            email: user.email,
+                            phone: user.phone,
+                            city: user.city,
+                            country: user.country,
+                            zip: user.zip,
+                            apartment: user.apartment,
+                            street: user.street
+                        });
+                    },
+                    error: (err) => {
+                        console.error('Error loading user data', err);
+                    }
+                });
+        }
+    }
+    ngOnDestroy(): void {
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
     }
 
-    ngOnDestroy(): void {
-      this.unsubscribe$.next();
-      this.unsubscribe$.complete();
-  }
+    private _initCheckoutForm() {
+        this.checkoutFormGroup = this.formBuilder.group({
+            name: ['', Validators.required],
+            email: ['', [Validators.email, Validators.required]],
+            phone: ['', Validators.required],
+            city: ['', Validators.required],
+            country: ['', Validators.required],
+            zip: ['', Validators.required],
+            apartment: ['', Validators.required],
+            street: ['', Validators.required]
+        });
+    }
 
-  private _initCheckoutForm() {
-    this.checkoutFormGroup = this.formBuilder.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.email, Validators.required]],
-      phone: ['', Validators.required],
-      city: ['', Validators.required],
-      country: ['', Validators.required],
-      zip: ['', Validators.required],
-      apartment: ['', Validators.required],
-      street: ['', Validators.required]
-    });
-  }
+    private _getCountries() {
+        this.countries = this.usersService.getCountries();
+    }
 
-  private _autoFillUserData() {
-    this.usersService
-    .observeCurrentUser()
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(user => {
-      if(user){
-        this.userId = user.id || '';
-        this.checkoutForm['name'].setValue(user.name || '');
-        this.checkoutForm['email'].setValue(user.email || '');
-        this.checkoutForm['phone'].setValue(user.phone || '');
-        this.checkoutForm['city'].setValue(user.city);
-        this.checkoutForm['country'].setValue(user.country);
-        this.checkoutForm['zip'].setValue(user.zip);
-        this.checkoutForm['apartment'].setValue(user.apartment);
-        this.checkoutForm['street'].setValue(user.street);
+    backToCart() {
+        this.router.navigate(['/']);
+    }
 
-      }
-    })
-  }
+    onSubmit() {
+        this.isSubmitted = true;
 
-  private _getCountries() {
-    this.countries = this.usersService.getCountries();
-  }
+        if (this.checkoutFormGroup.invalid) {
+            return;
+        }
 
-  backToCart() {
-    this.router.navigate(['/']);
-  }
+        const updatedUser = {
+            name: this.checkoutForm['name'].value,
+            email: this.checkoutForm['email'].value,
+            phone: this.checkoutForm['phone'].value,
+            city: this.checkoutForm['city'].value,
+            country: this.checkoutForm['country'].value,
+            zip: this.checkoutForm['zip'].value,
+            apartment: this.checkoutForm['apartment'].value,
+            street: this.checkoutForm['street'].value
+        };
 
-  get checkoutForm() {
-    return this.checkoutFormGroup.controls;
-  }
+        this.usersService
+            .updateUser(this.userId, updatedUser)
+            .pipe(take(1))
+            .subscribe({
+                next: () => {
+                    console.log('Profile updated successfully');
+                },
+                error: (err) => {
+                    console.error('Error updating profile:', err);
+                }
+            });
+    }
+
+    get checkoutForm() {
+        return this.checkoutFormGroup.controls;
+    }
 }

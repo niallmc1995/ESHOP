@@ -77,7 +77,7 @@ export class UsersFormComponent implements OnInit {
     }
 
     private _updateUser(user: User) {
-        this.usersService.updateUser(user).subscribe(
+        this.usersService.updateUser(user.id, user).subscribe(
             () => {
                 this.messageService.add({
                     severity: 'success',
